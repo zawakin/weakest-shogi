@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/zawawahoge/weakest-shogi/usi"
 )
 
@@ -44,28 +42,4 @@ func (h *baseUSIHandler) HandleCommand(ctx context.Context, command string) (boo
 	}
 
 	return true, nil
-}
-
-func handleFirstUSI(ctx context.Context, cmds []string) {
-	log.Debugf("FirstUSI called; cmds=%#v", cmds)
-
-	res := &usi.FirstUSIResponse{
-		Name:   "weakest-shogi",
-		Author: "zawawahoge",
-	}
-	fmt.Printf("id name %s\n", res.Name)
-	fmt.Printf("id author %s\n", res.Author)
-	fmt.Println("usiok")
-}
-
-func handleIsReady(ctx context.Context, cmds []string) {
-	log.Debugf("IsReady called; cmds=%#v", cmds)
-
-	fmt.Println("readyok")
-}
-
-func handleNewGame(ctx context.Context, cmds []string) {
-	log.Debugf("NewGame called; cmds=%#v", cmds)
-
-	fmt.Println("readyok")
 }
