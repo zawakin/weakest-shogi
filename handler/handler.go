@@ -35,6 +35,10 @@ func (h *baseUSIHandler) HandleCommand(ctx context.Context, command string) (boo
 		handleFirstUSI(ctx, cmds)
 	case usi.CommandIsReady:
 		handleIsReady(ctx, cmds)
+	case usi.CommandNewGame:
+		handleNewGame(ctx, cmds)
+	case usi.CommandGo:
+		handleGo(ctx, cmds)
 	case usi.CommandQuit:
 		return false, nil
 	default:
