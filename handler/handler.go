@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"strings"
 
 	"github.com/zawawahoge/weakest-shogi/usi"
@@ -15,11 +16,14 @@ type USIHandler interface {
 }
 
 type baseUSIHandler struct {
+	writer io.Writer
 }
 
 // NewUSIHandler is constructor of USI handler.
-func NewUSIHandler() USIHandler {
-	return &baseUSIHandler{}
+func NewUSIHandler(writer io.Writer) USIHandler {
+	return &baseUSIHandler{
+		writer: writer,
+	}
 }
 
 // HandleUSICommand handles usi command.
@@ -32,13 +36,13 @@ func (h *baseUSIHandler) HandleCommand(ctx context.Context, command string) (boo
 	first := cmds[0]
 	switch usi.Command(first) {
 	case usi.CommandFirstUSI:
-		handleFirstUSI(ctx, cmds)
+		h.handleFirstUSI(ctx, cmds)
 	case usi.CommandIsReady:
-		handleIsReady(ctx, cmds)
+		h.handleIsReady(ctx, cmds)
 	case usi.CommandNewGame:
-		handleNewGame(ctx, cmds)
+		h.handleNewGame(ctx, cmds)
 	case usi.CommandGo:
-		handleGo(ctx, cmds)
+		h.handleGo(ctx, cmds)
 	case usi.CommandQuit:
 		return false, nil
 	default:
@@ -46,4 +50,12 @@ func (h *baseUSIHandler) HandleCommand(ctx context.Context, command string) (boo
 	}
 
 	return true, nil
+}
+
+func (h *baseUSIHandler) Printf(format string, a ...interface{}) {
+	io.WriteString(h.writer, fmt.Sprintf(format, a...))
+}
+
+func (h *baseUSIHandler) Println(s string) {
+	io.WriteString(h.writer, fmt.Sprintf("%s\n", s))
 }

@@ -1,6 +1,6 @@
-.PHONY: clean proto
+.PHONY: clean proto build test
 
-all: clean proto
+all: clean proto build
 
 SRC_DIR = ${PWD}/proto
 DST_DIR = ${PWD}/usi
@@ -12,3 +12,6 @@ clean:
 
 build:
 	go build -o weakest-shogi ./*.go
+
+test:
+	go test ./... -count=1

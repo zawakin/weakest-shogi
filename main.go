@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 
 	log "github.com/sirupsen/logrus"
 
@@ -12,7 +13,7 @@ import (
 func main() {
 	var err error
 
-	handler := handler.NewUSIHandler()
+	handler := handler.NewUSIHandler(os.Stdout)
 
 	isContinued := true
 	for isContinued {
