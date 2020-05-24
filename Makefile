@@ -9,3 +9,6 @@ proto:
 
 clean:
 	rm ${DST_DIR}/*.pb.go
+
+build:
+	go build -o weakest-shogi ./*.go
