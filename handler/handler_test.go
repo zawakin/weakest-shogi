@@ -10,12 +10,12 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func runSingleCommand(cmd string) string {
+func runSingleCommand(cmd string) (string, error) {
 	stdout := new(bytes.Buffer)
 	h := NewUSIHandler(stdout)
-	h.HandleCommand(context.Background(), cmd)
+	_, err := h.HandleCommand(context.Background(), cmd)
 
-	return string(stdout.Bytes())
+	return string(stdout.Bytes()), err
 }
 
 func Test_USIHandler_HandleCommand_FirstUSI(t *testing.T) {
@@ -24,7 +24,10 @@ func Test_USIHandler_HandleCommand_FirstUSI(t *testing.T) {
 id author zawawahoge
 usiok
 `
-	got := runSingleCommand(cmd)
+	got, err := runSingleCommand(cmd)
+	if err != nil {
+		t.Fatalf("h.HandleCommand(ctx,%s)=_, %#v; want nil", cmd, err)
+	}
 	if got != want {
 		t.Errorf("h.HandleCommand(ctx,%s); got=%s; want=%s\ncmp.Diff(got,want)=%s", cmd, got, want, cmp.Diff(got, want))
 	}
@@ -34,17 +37,23 @@ func Test_USIHandler_HandleCommand_IsReady(t *testing.T) {
 	cmd := "isready"
 	want := "readyok\n"
 
-	got := runSingleCommand(cmd)
+	got, err := runSingleCommand(cmd)
+	if err != nil {
+		t.Fatalf("h.HandleCommand(ctx,%s)=_, %#v; want nil", cmd, err)
+	}
 	if got != want {
 		t.Errorf("h.HandleCommand(ctx,%s); got=%s; want=%s\ncmp.Diff(got,want)=%s", cmd, got, want, cmp.Diff(got, want))
 	}
 }
 
 func Test_USIHandler_HandleCommand_NewGame(t *testing.T) {
-	cmd := "newgame"
+	cmd := "usinewgame"
 	want := ""
 
-	got := runSingleCommand(cmd)
+	got, err := runSingleCommand(cmd)
+	if err != nil {
+		t.Fatalf("h.HandleCommand(ctx,%s)=_, %#v; want nil", cmd, err)
+	}
 	if got != want {
 		t.Errorf("h.HandleCommand(ctx,%s); got=%s; want=%s\ncmp.Diff(got,want)=%s", cmd, got, want, cmp.Diff(got, want))
 	}
@@ -54,7 +63,10 @@ func Test_USIHandler_HandleCommand_Go(t *testing.T) {
 	cmd := "go"
 	want := "bestmove resign\n"
 
-	got := runSingleCommand(cmd)
+	got, err := runSingleCommand(cmd)
+	if err != nil {
+		t.Fatalf("h.HandleCommand(ctx,%s)=_, %#v; want nil", cmd, err)
+	}
 	if got != want {
 		t.Errorf("h.HandleCommand(ctx,%s); got=%s; want=%s\ncmp.Diff(got,want)=%s", cmd, got, want, cmp.Diff(got, want))
 	}

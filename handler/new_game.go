@@ -8,6 +8,4 @@ import (
 
 func (h *baseUSIHandler) handleNewGame(ctx context.Context, cmds []string) {
 	log.Debugf("NewGame called; cmds=%#v", cmds)
-
-	h.Println("readyok")
 }
