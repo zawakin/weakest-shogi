@@ -1,0 +1,136 @@
+syntax = "proto3";
+package usi;
+
+option go_package = "usi";
+
+message Option {
+    string name = 1;
+    enum Type {
+        CHECK = 0;
+        SPIN = 1;
+        COMBO = 2;
+        BUTTON = 3;
+        STRING = 4;
+        FILENAME = 5;
+    }
+    Type type = 2;
+
+    message Check {
+        bool default = 1;
+    }
+    Check check = 3;
+
+    message Spin {
+        int32 default = 1;
+        int32 min = 2;
+        int32 max = 3;
+    }
+    Spin spin = 4;
+
+    message Combo {
+        string default = 1;
+        repeated string vars = 2;
+    }
+    Combo combo = 5;
+
+    string string_default = 6;
+    string filename_default = 7;
+}
+
+message Position {
+    string sfen = 1; // If sfen is empty string, it will be interpreted as `startpos`.
+    repeated string moves = 2;
+}
+
+message FirstUSIRequest {
+}
+
+message FirstUSIResponse {
+    string name = 1;
+    string author = 2;
+    repeated Option options = 3;
+}
+
+message IsReadyRequest {
+}
+
+message IsReadyResponse {
+    bool is_ready = 1;
+}
+
+message SetOptionRequest {
+    string id = 1;
+    string value = 2;
+}
+
+message SetOptionResponse {
+    Option option = 1;
+}
+
+message NewGameRequest {
+}
+
+message NewGameResponse {
+}
+
+message SetPositionRequest {
+    Position position = 1;
+}
+
+message SetPositionResponse {
+}
+
+message GoRequest {
+    bool is_ponder = 1; // 先読み
+    int32 btime = 2; // 先手の残り時間[ms]
+    int32 wtime = 3; // 後手の残り時間[ms]
+    int32 byoyomi = 4; // 秒読み[ms]
+
+    // フィッシャークロックルールの加算時間
+    int32 binc = 5; // 先手の加算時間[ms]
+    int32 winc = 6; // 後手の加算時間[ms]
+    bool infinite = 7; // 時間無制限で思考させる
+
+    message Mate {
+        bool infinite = 1;
+        int32 thinking_time = 2;
+    }
+    Mate mate = 8;
+}
+
+message GoResponse {
+}
+
+message StopRequest {
+}
+
+message StopResponse {
+    string best_move = 1; // その時点での指し手
+    string ponder_move = 2; // 次の相手の指し手を予想したもの. go 
+}
+
+// Ponderhit は、go ponder による先読み中に、相手の指し手が StopResponse.ponder_move と
+// 一致している場合にクライアントから送る。 先読みから通常思考に切り替える。
+message PonderhitRequest {
+}
+
+message PonderhitResponse {
+}
+
+message QuitRequest {
+}
+
+message QuitResponse {
+}
+
+message GameOverRequest {
+    enum Result {
+        WIN = 0;
+        LOSE = 1;
+        DRAW = 2;
+    }
+    Result result = 1;
+}
+
+message GameOverResponse {
+}
