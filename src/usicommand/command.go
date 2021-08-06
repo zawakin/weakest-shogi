@@ -1,4 +1,4 @@
-package usi
+package usicommand
 
 // Command is a type of a usi command.
 type Command string

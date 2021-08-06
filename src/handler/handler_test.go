@@ -15,7 +15,7 @@ func runSingleCommand(cmd string) (string, error) {
 	h := NewUSIHandler(stdout)
 	_, err := h.HandleCommand(context.Background(), cmd)
 
-	return string(stdout.Bytes()), err
+	return stdout.String(), err
 }
 
 func Test_USIHandler_HandleCommand_FirstUSI(t *testing.T) {

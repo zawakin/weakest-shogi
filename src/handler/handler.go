@@ -7,7 +7,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/zawawahoge/weakest-shogi/usi"
+	"github.com/zawawahoge/weakest-shogi/usicommand"
 )
 
 // USIHandler is a handler of USI command.
@@ -30,23 +30,23 @@ func NewUSIHandler(writer io.Writer) USIHandler {
 func (h *baseUSIHandler) HandleCommand(ctx context.Context, command string) (bool, error) {
 	cmds := strings.Fields(command)
 	if len(cmds) == 0 {
-		return true, errors.New("Command is empty")
+		return true, errors.New("command is empty")
 	}
 
 	first := cmds[0]
-	switch usi.Command(first) {
-	case usi.CommandFirstUSI:
+	switch usicommand.Command(first) {
+	case usicommand.CommandFirstUSI:
 		h.handleFirstUSI(ctx, cmds)
-	case usi.CommandIsReady:
+	case usicommand.CommandIsReady:
 		h.handleIsReady(ctx, cmds)
-	case usi.CommandNewGame:
+	case usicommand.CommandNewGame:
 		h.handleNewGame(ctx, cmds)
-	case usi.CommandGo:
+	case usicommand.CommandGo:
 		h.handleGo(ctx, cmds)
-	case usi.CommandQuit:
+	case usicommand.CommandQuit:
 		return false, nil
 	default:
-		return true, fmt.Errorf("Invalid command; cmd = %s", command)
+		return true, fmt.Errorf("invalid command; cmd = %s", command)
 	}
 
 	return true, nil
