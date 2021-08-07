@@ -88,7 +88,7 @@ func Test_USIHandler_HandleCommand_Quit(t *testing.T) {
 
 func Test_USIHandler_HandleCommand_Empty(t *testing.T) {
 	cmd := ""
-	wantErr := errors.New("Command is empty")
+	wantErr := errors.New("command is empty")
 
 	h := NewUSIHandler(os.Stdout)
 	_, err := h.HandleCommand(context.Background(), cmd)
